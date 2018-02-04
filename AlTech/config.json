@@ -1,0 +1,15 @@
+{
+  "enabled":true,
+  "show_resource_errors":false,
+  "compability":{
+    "industrial_craft":true
+  },
+  "furnacesOptions":{
+    "blastFurnaceFuelFlowEfficiencyPercent":150,
+    "blastFurnaceRecipesEfficiencyPercent":150,
+    "blastFurnaceMaxTemp":1600,
+    "compactedFurnaceFuelFlowEfficiencyPercent":100,
+    "compactedFurnaceRecipesEfficiencyPercent":50,
+    "compactedFurnaceMaxTemp":1000
+  }
+}
