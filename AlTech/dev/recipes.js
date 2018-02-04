@@ -13,8 +13,6 @@ ATMech.Fuel({id:5, data:3, second: 7.5, f:1});
 ATMech.Fuel({id:5, data:4, second: 7.5, f:1});
 ATMech.Fuel({id:5, data:5, second: 7.5, f:1});
 
-
-
 /*Recipes.ReplaceWithShaped = function(item, newRecipe, transcript, tool){
 	Recipes.deleteRecipe(item);
 	Recipes.addShaped(item, newRecipe, transcript, tool);

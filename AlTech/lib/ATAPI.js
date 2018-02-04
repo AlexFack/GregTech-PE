@@ -157,8 +157,13 @@ var ATMat = {
 	hummers:[],
     tungstensteels:[],
     mortars:[],
+    cutters:[],
 	MaterialRegister: function(name, obj, obj1){
-		var it = {temp:obj1 .temp, long:obj1.long}
+		var it = {}
+		if(obj1){
+			it.temp = obj1.temp
+            it.long = obj1.long
+        }
 		if(obj.isDust==true){
 			it.dust = IDRegistry.genItemID("dust"+name);
             Item.createItem("dust"+name, name+" dust", {name:name+"_dust"});
