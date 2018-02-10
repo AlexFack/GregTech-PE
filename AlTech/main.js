@@ -30,73 +30,137 @@ furnaceOptions: {
 }
 });
 
-var industrial_craft = __config__.access("compability.industrial_craft") == true;
-var furnaceRecipes = ATMech.furnaceRecipes
-var furnaceFuel = ATMech.furnaceFuel
-
 var round = function(num, x){
 	var multiplier = Math.pow(10, x)
 	return Math.floor(num * multiplier) / multiplier
 }
 
+
 var random = function(min, max){
-	return Math.floor(Math.random() * (max - min + 1)) + min;
+	return Math.floor(java.lang.Math.random() * (max - min + 1)) + min;
 }
+
+var rollPercentage = function(pr){
+    return pr>=round(Math.random()*100, 2)
+}
+
+var industrial_craft = __config__.access("compability.industrial_craft") == true;
+var furnaceRecipes = ATMech.furnaceRecipes
+var furnaceFuel = ATMech.furnaceFuel
+
+var ironTemp = 1600
+var ironLong = 40
+
+var goldTemp = 1000
+var goldLong = 30
+
+var copperTemp = 1000
+var copperLong = 30
+
+var tinTemp = 200
+var tinLong = 10
+
+var steelLong = 240
+var steelTemp = 1600
 
 
 
 
 // file: items/tools.js
 
-CTR.RegisterHammer = function(name, data){
-	var id = IDRegistry.genItemID(name+"Hammer");
-    Item.createItem(name+"Hammer", "Hammer from "+name, {name:name+"_hammer"}, {stack:1});
-    CTR.addTool(id, data)
-    ATMat.hummers.push(id)
-}
-	
-CTR.RegisterTungstensteel = function(name, data){
-	var id = IDRegistry.genItemID(name+"Tungstensteel");
-    Item.createItem(name+"Tungstensteel", "Tungstensteel from "+name, {name:name+"_tungstensteel"}, {stack:1});
-    CTR.addTool(id, data)
-    ATMat.tungstensteels.push(id)
-}
 
-CTR.RegisterMortar = function(name, data){
-	var id = IDRegistry.genItemID(name+"Mortar");
-    Item.createItem(name+"Mortar", "Mortar from "+name, {name:name+"_mortar"}, {stack:1});
-    CTR.addTool(id, data)
-    ATMat.mortars.push(id)
-}
 
-CTR.RegisterCutter = function(name, data){
-	var id = IDRegistry.genItemID(name+"Cutter");
-    Item.createItem(name+"Cutter", "Cutter from "+name, {name:name+"_cutter"}, {stack:1});
-    CTR.addTool(id, data)
-    ATMat.cutters.push(id)
-}
+CTR.RegisterHammer("Stone", 8, 2)
+CTR.RegisterHammer("Iron", 256, 3)
+CTR.RegisterHammer("Bronze", 128, 3)
+//CTR.RegisterHammer("Gold", 32)
+CTR.RegisterHammer("Steel", 512, 4)
+CTR.RegisterHammer("Diamond", 1024, 4)
 
-CTR.RegisterHammer("Stone", 5)
-CTR.RegisterHammer("Iron", 128)
-CTR.RegisterHammer("Bronze", 64)
-CTR.RegisterHammer("Gold", 32)
-CTR.RegisterHammer("Steel", 256)
+CTR.RegisterCutter("Iron", 256)
+CTR.RegisterCutter("Bronze", 128)
+//CTR.RegisterCutter("Gold", 32)
+CTR.RegisterCutter("Steel", 512)
 
-CTR.RegisterCutter("Iron", 128)
-CTR.RegisterCutter("Bronze", 64)
-CTR.RegisterCutter("Gold", 32)
-CTR.RegisterCutter("Steel", 256)
-
-CTR.RegisterTungstensteel("Iron", 128)
-CTR.RegisterTungstensteel("Bronze", 64)
-CTR.RegisterTungstensteel("Gold", 32)
-CTR.RegisterTungstensteel("Steel", 256)
+CTR.RegisterFile("Iron", 256)
+CTR.RegisterFile("Bronze", 128)
+//CTR.RegisterTungstensteel("Gold", 32)
+CTR.RegisterFile("Steel", 512)
 
 CTR.RegisterMortar("Stone", 8)
-CTR.RegisterMortar("Iron", 128)
-CTR.RegisterMortar("Bronze", 64)
-CTR.RegisterMortar("Gold", 32)
-CTR.RegisterMortar("Steel", 256)
+CTR.RegisterMortar("Iron", 256)
+CTR.RegisterMortar("Bronze", 128)
+//CTR.RegisterMortar("Gold", 32)
+CTR.RegisterMortar("Steel", 512)
+
+CTR.RegisterWrench("Iron", 256)
+CTR.RegisterWrench("Bronze", 128)
+//CTR.RegisterWrench("Gold", 32)
+CTR.RegisterWrench("Steel", 512)
+CTR.RegisterWrench("Lead", 128)
+CTR.RegisterWrench("Silver", 128)
+
+CTR.RegisterScrewdriver("Iron", 256)
+CTR.RegisterScrewdriver("Bronze", 128)
+//CTR.RegisterScrewdriver("Gold", 32)
+CTR.RegisterScrewdriver("Steel", 512)
+CTR.RegisterScrewdriver("Lead", 128)
+CTR.RegisterScrewdriver("Silver", 128)
+	
+var hammers = ATMat.hammers
+var files = ATMat.files
+var mortars = ATMat.mortars
+var cutters = ATMat.cutters
+var wrenchs = ATMat.wrenchs
+var screwdrivers = ATMat.screwdrivers
+	
+Callback.addCallback("PostLoaded", function(){
+	var A = ATMat
+	for(var key1 in A.gems){
+		for(var key2 in A.hammers){
+		    if(A.gems[key1].mat == A.hammers[key2].mat){
+		        Recipes.addShaped({id:A.hammers[key2].id, count:1, data:0}, ["aa ", "aab", "aa"], ['a', A.gems[key1].id, 0, 'b', 280, 0]);
+		    }
+        }
+    }
+    for(var key1 in A.plates){
+    	for(var key2 in A.cutters){
+            	if(A.plates[key1].mat == A.cutters[key2].mat){
+                    CreateRecipeWithTool({id:A.cutters[key2].id, count:1, data:0}, ["d d", "fdh", "c c"], ['c', 280, 0, 'd', A.plates[key1].id, 0], [hammers, files]);
+                }
+            }
+        for(var key2 in A.wrenchs){
+            	if(A.plates[key1].mat == A.wrenchs[key2].mat){
+                    CreateRecipeWithTool({id:A.wrenchs[key2].id, count:1, data:0}, ["aha", "aaa", " a "], ['a', A.plates[key1].id, 0], [hammers]);
+                }
+            }
+    }
+    for(var key1 in A.ingots){
+		for(var key2 in A.hammers){
+			if(A.ingots[key1].mat == A.hammers[key2].mat){
+			    Recipes.addShaped({id:A.hammers[key2].id, count:1, data:0}, ["aa ", "aab", "aa"], ['a', A.ingots[key1].id, 0, 'b', 280, 0]);
+            }
+        }
+        for(var key2 in A.mortars){
+        	if(A.ingots[key1].mat == A.mortars[key2].mat){
+                CreateRecipeWithTool({id:A.mortars[key2].id, count:1, data:0}, [" h ", "cac", " c "], ['a', A.ingots[key1].id, 0, 'c', 1, 0], [hammers])
+            }
+        }
+        for(var key2 in A.files){
+        	if(A.ingots[key1].mat == A.files[key2].mat){
+                CreateRecipeWithTool({id:A.files[key2].id, count:1, data:0}, ["a ", "ah", "b "], ['a', A.ingots[key1].id, 0, 'b', 280, 0], [hammers])
+            }
+        }
+        for(var key3 in A.plates){
+            for(var key2 in A.screwdrives){
+            	if(A.ingots[key1].mat == A.screwdrives[key2].mat && A.plates[key3].mat == A.screwdrives[key2].mat){
+            	    CreateRecipeWithTool({id:A.screwdrives[key2].id, count:1, data:0}, ["af", "dh", "c "], ['a', A.ingots[key1].id, 0, 'c', 280, 0, 'd', A.plates[key3].id, 0], [hammers, files])
+                }
+            }
+        }
+    }
+})
+
 
 //tools
 IDRegistry.genItemID("stonepickaxe");
@@ -133,8 +197,8 @@ Item.createItem("woodhoe", "Деревянная мотыга", {name:"wood_hoe"
 IDRegistry.genItemID("woodpickaxe");
 Item.createItem("woodpickaxe", "Деревянная кирка", {name:"wood_pickaxe"}, {stack:1});
 
-var cwood = {durability: 12, level: 1, efficiency:2, damage: 2, enchantability: 16};
-var cstone = {durability: 38, level: 2, efficiency:3, damage: 2, enchantability: 16};
+var cwood = {durability: 12, level: 1, efficiency:4, damage: 2, enchantability: 16};
+var cstone = {durability: 38, level: 2, efficiency:5, damage: 2, enchantability: 16};
 
 ToolAPI.setTool(ItemID.stonepickaxe, cstone, ToolType.pickaxe);
 ToolAPI.setTool(ItemID.stonesword, cstone, ToolType.sword);
@@ -153,19 +217,26 @@ ToolAPI.setTool(ItemID.woodhoe, cwood, ToolType.hoe);
 
 // file: items/materialRegister.js
 
-var metalls = {isDust:true, isIngot:true, isPlate:true, isNugget:true, isSmallDust:true, isTinyDust:false, isBolt:true, isLittleOre:false, isModule:true, generateRecipes:true, isOre:false}
-var metalls_non_module = {isDust:true, isIngot:true, isPlate:true, isNugget:true, isSmallDust:true, isTinyDust:false, isBolt:false, isLittleOre:false, isModule:false, generateRecipes:true, isOre:false}
+var metalls =                      {isDust:true, isIngot:true, isPlate:true, isNugget:true, isSmallDust:true, isBolt:true, isModule:true, generateRecipes:true}
+var metalls_non_module = {isDust:true, isIngot:true, isPlate:true, isNugget:true, isSmallDust:true, generateRecipes:true}
+var metalls_with_ore =       {isDust:true, isIngot:true, isPlate:true, isNugget:true, isSmallDust:true, isLittleOre:true, generateRecipes:true}
 
-var stones = {isDust:true, isIngot:false, isPlate:false, isNugget:false, isSmallDust:true, isTinyDust:false, isBolt:false, isLittleOre:true, isModule:false, generateRecipes:true, isOre:false}
+var stones = {isDust:true, isSmallDust:true, isLittleOre:true, generateRecipes:true}
 
-var iron = {isDust:true, isIngot:false, isPlate:true, isNugget:true, isSmallDust:true, isTinyDust:false, isBolt:true, isLittleOre:true, isModule:true, generateRecipes:true, isOre:false}
-var gold = {isDust:true, isIngot:false, isPlate:true, isNugget:false, isSmallDust:true, isTinyDust:false, isBolt:false, isLittleOre:true, isModule:false, generateRecipes:true, isOre:false}
+var iron = {isDust:true, isPlate:true, isNugget:true, isSmallDust:true, isBolt:true, isLittleOre:true, isModule:true, generateRecipes:true}
+var gold = {isDust:true, isPlate:true, isNugget:false, isSmallDust:true, isLittleOre:true, generateRecipes:true}
+
+var gems = {idDust:true, isDust:true, isSmallDust:true, isGem:true, generateRecipes:true}
+
+ATMat.MaterialRegister("Coal", {isDust:true})
+ATMat.MaterialRegister("Redstone", {isDust:true})
+ATMat.MaterialRegister("Lapis", {isDust:true})
 
 ATMat.MaterialRegister("Stone", stones)
 ATMat.MaterialRegister("RedGranit", stones)
 ATMat.MaterialRegister("BlackGranit", stones)
 
-ATMat.MaterialRegister("Steel", metalls, {temp:1600, long:240})
+ATMat.MaterialRegister("Steel", metalls, {temp:steelTemp, long:steelLong})
 ATMat.MaterialRegister("Bronze", metalls, {temp:1000, long:30})
 ATMat.MaterialRegister("Chrome", metalls, {temp:1900,  long:300})
 ATMat.MaterialRegister("Aluminium", metalls, {temp:600, long:20})
@@ -173,24 +244,21 @@ ATMat.MaterialRegister("Titanium",  metalls, {temp:1600, long:240})
 ATMat.MaterialRegister("Stainless", metalls, {temp:1800, long:260})
 ATMat.MaterialRegister("Volfram", metalls, {temp:3400, long:400}) 
 
-ATMat.MaterialRegister("Copper", metalls_non_module, {temp:1000, long:30})
-ATMat.MaterialRegister("Tin", metalls_non_module, {temp:200, long:10})
+ATMat.MaterialRegister("Copper", metalls_with_ore, {temp:copperTemp, long:copperLong})
+ATMat.MaterialRegister("Tin", metalls_with_ore, {temp:tinTemp, long:tinLong})
+
 ATMat.MaterialRegister("Nikel",  metalls_non_module, {temp:1400, long:60})
 ATMat.MaterialRegister("Antimony", metalls_non_module, {temp:1600, long:30})
 ATMat.MaterialRegister("Silver", metalls_non_module, {temp:900, long:30})
 ATMat.MaterialRegister("Lead", metalls_non_module, {temp:300, long:10})
 
-ATMat.MaterialRegister("Iron", iron, {temp:1000, long:100})
-ATMat.MaterialRegister("Gold", gold, {temp:1000, long:30})
+ATMat.MaterialRegister("Iron", iron, {temp:ironTemp, long:ironLong})
+ATMat.MaterialRegister("Gold", gold, {temp:goldTemp, long:goldLong})
 
-
-
-
-// file: items/other.js
-
-//???
-IDRegistry.genItemID("itemlava");
-Item.createItem("itemlava", "item_lava", {name:"lava"}, {isTech:true})
+ATMat.MaterialRegister("Diamond", gems, {temp:4000, long:100})
+ATMat.MaterialRegister("Ruby", gems, {temp:2000, long:100})
+ATMat.MaterialRegister("Saphire", gems, {temp:2300, long:100})
+ATMat.MaterialRegister("Emerald", gems, {temp:1400, long:100})
 
 
 
@@ -198,20 +266,17 @@ Item.createItem("itemlava", "item_lava", {name:"lava"}, {isTech:true})
 // file: items/ids.js
 
 //id items
-var cobbhum = ItemID.stoneHammer;
-var irhum = ItemID.ironHammer;
-var irtung = ItemID.ironTungstensteel;
-var mort = ItemID.stoneMortar;
+var irhum = ItemID.IronHammer;
+var irtung = ItemID.IronTungstensteel;
+var mort = ItemID.StoneMortar;
 var litst = ItemID.littleStone
 var irpl = ItemID.plateIron;
 var brpl = ItemID.plateBronze;
 var gpl = ItemID.plateGold;
-var litir = ItemID.littleIronOre;
-var litcopp = ItemID.littleCopperOre;
-var littin = ItemID.littleTinOre;
-var litg = ItemID.littleGoldOre;
-var igcopp = ItemID.ingotCopper;
-var igtin = ItemID.ingotTin;
+var litir = ItemID.littleIron
+var litcopp = ItemID.littleCopper
+var littin = ItemID.littleTin
+var litg = ItemID.littleGold
 var igbr = ItemID.ingotBronze;
 var igst = ItemID.ingotSteel;
 var duir = ItemID.dustIron;
@@ -225,8 +290,21 @@ var sducopp = ItemID.smallDustCopper;
 var sdutin = ItemID.smallDustTin;
 var brmod = ItemID.moduleBronze;
 var brbolt = ItemID.boltBronze
+ItemID.nuggetGold = 371
+ItemID.ingotGold = 266
+ItemID.ingotIron = 265
+ItemID.coal = 263
  
 var lava = ItemID.itemlava;
+
+
+
+
+// file: items/other.js
+
+//???
+IDRegistry.genItemID("itemlava");
+Item.createItem("itemlava", "item_lava", {name:"lava"}, {isTech:true})
 
 
 
@@ -400,10 +478,25 @@ var bMaxTemp = __config__.access("furnacesOptions.blastFurnaceMaxTemp")
 //mechs
 IDRegistry.genBlockID("blastfurnace");
 Block.createBlockWithRotation("blastfurnace", [
-	{name: "Доменная печь", texture: [["blast_furnace_block", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ], ["blast_furnace", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ]], inCreative: true}]);
+	{name: "Blast furnace", texture: [["blast_furnace_block", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ], ["blast_furnace", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ]], inCreative: true}]);
 IDRegistry.genBlockID("bronzeblock");
 Block.createBlock("bronzeblock", [
-	{name: "Блок доменной печи", texture: [["blast_furnace_block", 0]], inCreative: true}]);
+	{name: "Blast furnace block", texture: [["blast_furnace_block", 0]], inCreative: true}]);
+	
+Block.registerDropFunction("blastfurnace", function(coords, id, data, level){ 
+	if(level>=2){
+		return [[id, 1, data]]
+	}
+	return []
+})
+	
+Block.registerDropFunction("bronzeblock", function(coords, id, data, level){ 
+	if(level>=2){
+		return [[id, 1, data]]
+	}
+	return []
+})
+	
 var m = {x:0, y:0, z:0};
 var b = BlockID.bronzeblock;
 var d = null;
@@ -501,10 +594,25 @@ var cMaxTemp = __config__.access("furnacesOptions.compactedFurnaceMaxTemp")
 //mechs
 IDRegistry.genBlockID("compactedfurnace");
 Block.createBlockWithRotation("compactedfurnace", [
-	{name: "Промышленная каменная печь", texture: [["compacted_stone", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ], ["furnace", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ]], inCreative: true}]);
+	{name: "Cobb furnace", texture: [["compacted_stone", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ], ["furnace", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ]], inCreative: true}]);
 IDRegistry.genBlockID("compactedcobblestone");
 Block.createBlock("compactedcobblestone", [
-{name: "Уплотненный булыжник", texture: [["compacted_stone", 0]], inCreative: true}]);
+{name: "Cobb furnace block", texture: [["compacted_stone", 0]], inCreative: true}]);
+
+Block.registerDropFunction("compactedfurnace", function(coords, id, data, level){ 
+	if(level>=1){
+		return [[id, 1, data]]
+	}
+	return []
+})
+
+Block.registerDropFunction("compactedcobblestone", function(coords, id, data, level){ 
+	if(level>=1){
+		return [[id, 1, data]]
+	}
+	return []
+})
+
 var c = BlockID.compactedcobblestone;
 
 var compactedfurnacestruct = [[
@@ -583,38 +691,22 @@ MAPI.Register(compactedfurnacecon, compactedfurnacestruct);
 
 
 
-// file: blocks/blocks.js
+// file: blocks/ores.js
 
 //ores
-var BLOCK_TYPE_ORE = Block.createSpecialType({
-	base: 1,
-	destroytime: 2,
-	opaque: true,
-}, "ore");
-
 var BLACK_STONE = Block.createSpecialType({
 	base: 1,
-	destroytime: 3,
+	destroytime: 5,
 	opaque: true,
-}, "stone");
+	solid: true,
+}, "ore");
 
 var RED_STONE = Block.createSpecialType({
 	base: 1,
-	destroytime: 2,
+	destroytime: 4,
 	opaque: true,
-}, "stone");
-
-IDRegistry.genBlockID("oreCopper");
-Block.createBlock("oreCopper", [
-	{name: "copper_ore", texture: [["ore_copper", 0]], inCreative: true}
-], BLOCK_TYPE_ORE );
-ToolAPI.registerBlockMaterial(BlockID.oreCopper, "stone");
-
-IDRegistry.genBlockID("oreTin");
-Block.createBlock("oreTin", [
-	{name: "tin_ore", texture: [["ore_tin", 0]], inCreative: true}
-], BLOCK_TYPE_ORE );
-ToolAPI.registerBlockMaterial(BlockID.oreTin, "stone");
+	solid: true,
+}, "ore");
 
 IDRegistry.genBlockID("blackstone");
 Block.createBlock("blackstone", [
@@ -640,47 +732,136 @@ Block.createBlock("redcobblestone", [
 ], RED_STONE );
 ToolAPI.registerBlockMaterial(BlockID.redcobblestone, "stone");
 
+    ATMat.OreRegister("Tetrahedrite", [["Copper", 1],  ["Chrome", 0], ["Nikel", 0], ["Gold", 0]], ["Stone", "RedGranite", "BlackGranite", "Nether", "End"], true)
+    ATMat.OreRegister("Copper", [["Copper", 2],  ["Iron", 1], ["Nikel", 0], ["Stone", 2]], ["Stone"], true)
+    ATMat.OreRegister("Tin", [["Tin", 2],  ["Nikel", 1], ["Iron", 0]], ["Stone", "RedGranite", "BlackGranite"], true)
+    ATMat.OreRegister("Iron", [["Iron", 2], ["Nikel", 1], ["Stone", 2]], ["Stone"], true)
+    ATMat.OreRegister("Lead", [["Lead", 2], ["Iron", 0], ["Tin", 0]], ["Stone", "End"], true)
+    ATMat.OreRegister("Galena", [["Silver", 1], ["Lead", 1], ["Stone", 2]], ["Stone"], true)
+    ATMat.OreRegister("Gold", [["Gold", 2], ["Silver", 1], ["Lead", 1]], ["Stone", "RedGranite", "BlackGranite", "Nether", "End"], true)
+    ATMat.OreRegister("Coal", [], ["Stone"], true)
+    ATMat.OreRegister("Bauxite", [["Titanium", 0], ["Aluminium", 1], ["Nikel", 1]], ["Stone"], true)    
+    ATMat.OreRegister("Saphire", [["Saphire",1], ["Lapis", 2]], ["Stone", "RedGranite", "BlackGranite"], true)
+    ATMat.OreRegister("Ruby", [["Ruby", 2], ["Ruby", 1], ["Chrome", 0]], ["Stone", "RedGranite", "BlackGranite"], true)
+    ATMat.OreRegister("Emerald", [["Emerald", 2], ["Emerald", 1]], ["RedGranite", "BlackGranite", "End"], true)
+    ATMat.OreRegister("Diamond", [["Diamond", 2], ["Diamond", 1], ["Stone", 2]], ["Stone"], true)
+    ATMat.OreRegister("Redstone", [], ["Stone"], true)
+    ATMat.OreRegister("Magnetite", [["Iron", 1], ["Gold", 0], ["Magnetite", 2]], ["Stone", "BlackGranite"], true)
+    ATMat.OreRegister("Volfram", [["Volfram", 2], ["Silver", 1], ["Lead", 1]], ["Stone", "BlackGranite"], true)
+    ATMat.OreRegister("Lapis", [["Lapis", 2], ["Saphire", 0]], ["BlackGranite", "RedGranite", "End"], true)
+    
+//GenerateChunk, GenerateNetherChunk, GenerateEndChunk
+var generateChance = function(c){
+	return c
+}
+
+ATGen.genBreed(BlockID.blackstone, 0, 16, 5, 16, 32, -1, [
+[BlockID.oreMagnetiteBlackGranite, BlockID.oreVolframBlackGranite, BlockID.oreVolframBlackGranite, BlockID.oreMagnetiteBlackGranite],
+[BlockID.oreTetrahedriteBlackGranite, BlockID.oreTinBlackGranite, BlockID.oreTetrahedriteBlackGranite, BlockID.oreTinBlackGranite],
+[BlockID.oreTetrahedriteBlackGranite, BlockID.oreGoldBlackGranite, BlockID.oreTinBlackGranite, BlockID.oreTetrahedriteBlackGranite],
+])
+
+ATGen.genBreed(BlockID.redstone, 0, 16, 5, 16, 32, -1, [
+[BlockID.oreLapisRedGranite, BlockID.oreSaphireRedGranite, BlockID.oreLapisRedGranite, BlockID.oreSaphireRedGranite],
+[BlockID.oreTetrahedriteRedGranite, BlockID.oreTinRedGranite, BlockID.oreTetrahedriteRedGranite, BlockID.oreTinRedGranite],
+])
+
+var tileTemplate = [1, 14, 15, 16, 56, 73, 74, 129, 21]
+//var tileTemplate = [0]
+
+ATGen.LargeOreDeposite(BlockID.oreMagnetiteStone, BlockID.oreIronStone, BlockID.oreIronStone, BlockID.oreMagnetiteStone, (20), tileTemplate, 48, 64, "GenerateChunk", {x:25, z:25}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreMagnetiteStone, BlockID.oreCopperStone, BlockID.oreTetrahedriteStone, BlockID.oreTinStone, (20), tileTemplate, 48, 64, "GenerateChunk", {x:25, z:25}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreMagnetiteStone, BlockID.oreGoldStone, BlockID.oreGoldStone, BlockID.oreMagnetiteStone, (5), tileTemplate, 20, 40, "GenerateChunk", {x:25, z:25}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreCoalStone, BlockID.oreCoalStone, BlockID.oreCoalStone, BlockID.oreCoalStone, (20), tileTemplate, 48, 64, "GenerateChunk", {x:25, z:25}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreTinStone, BlockID.oreSilverStone, BlockID.oreLeadStone, BlockID.oreGalenaStone, (15), tileTemplate, 48, 64, "GenerateChunk", {x:25, z:25}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreBauxiteStone, BlockID.oreIronStone, BlockID.oreIronStone, BlockID.oreBauxiteStone, (10), tileTemplate, 32, 40, "GenerateChunk", {x:25, z:25}, 25, 1)
+
+ATGen.LargeOreDeposite(BlockID.oreCoalStone, BlockID.oreDiamondStone, BlockID.oreDiamondStone, BlockID.oreCoalStone, (5), tileTemplate, 10, 20, "GenerateChunk", {x:15, z:15}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreRedstoneStone, BlockID.oreRubyStone, BlockID.oreRubyStone, BlockID.oreRedstoneStone, (5), tileTemplate, 10, 20, "GenerateChunk", {x:15, z:15}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreSaphireStone, BlockID.oreSaphireStone, BlockID.oreSaphireStone, BlockID.oreSaphireStone, (5), tileTemplate, 10, 20, "GenerateChunk", {x:5, z:5}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreRedstoneStone, BlockID.oreRedstoneStone, BlockID.oreRedstoneStone, BlockID.oreRedstoneStone, (15), tileTemplate, 10, 20, "GenerateChunk", {x:15, z:15}, 25, 1)
+
+ATGen.LargeOreDeposite(BlockID.oreGoldNether, BlockID.oreGoldNether, BlockID.oreGoldNether, BlockID.oreGoldNether, (10), [87], 0, 128, "GenerateNetherChunk", {x:10, z:10}, 33, 2)
+ATGen.LargeOreDeposite(BlockID.oreMagnetiteStone, BlockID.oreCopperStone, BlockID.oreTetrahedriteStone, BlockID.oreTinStone, (20), tileTemplate, 0, 128, "GenerateNetherChunk", {x:10, z:10}, 33, 2)
+
+ATGen.LargeOreDeposite(BlockID.oreLapisEnd, BlockID.oreLapisEnd, BlockID.oreEmeraldEnd, BlockID.oreLapisEnd, (20), [121], 32, 64, "GenerateEndChunk", {x:20, z:20}, 25, 1)
+ATGen.LargeOreDeposite(BlockID.oreLeadEnd, BlockID.oreGoldEnd, BlockID.oreGoldEnd, BlockID.oreTetrahedriteEnd, (20), [121], 32, 64, "GenerateEndChunk", {x:20, z:20}, 25, 1)
+
 //drop ores
-Callback.addCallback("PostLoaded", function(){
-    Block.registerDropFunctionForID(14, function(coords, id, data, level){ 
-    if(level>2){
-        return [[litg, 1, 0], [litst, 3, 0]];
+Block.registerDropFunctionForID(14, function(coords, id, data, level){ 
+    if(level>=1){
+        return [[4, 1, 0]];
     }
        return []
     });
-
 Block.registerDropFunctionForID(15, function(coords, id, data, level){ 
-    if(level>1){
-        return [[litir, 1, 0], [litst, 3, 0]];
+    if(level>=1){
+        return [[4, 1, 0]];
     }
        return []
     });
 Block.registerDropFunctionForID(16, function(coords, id, data, level){ 
     if(level>=1){
-        return [[litst, 3, 0], [263, 1, 0]];
+        return [[4, 1, 0]];
+    }
+       return []
+    });
+Block.registerDropFunctionForID(56, function(coords, id, data, level){ 
+    if(level>=1){
+        return [[4, 1, 0]];
+    }
+       return []
+    });
+Block.registerDropFunctionForID(73, function(coords, id, data, level){ 
+    if(level>=1){
+        return [[4, 1, 0]];
+    }
+       return []
+    });
+Block.registerDropFunctionForID(74, function(coords, id, data, level){ 
+    if(level>=1){
+        return [[4, 1, 0]];
+    }
+       return []
+    });
+Block.registerDropFunctionForID(129, function(coords, id, data, level){ 
+    if(level>=1){
+        return [[4, 1, 0]];
+    }
+       return []
+    });
+Block.registerDropFunctionForID(153, function(coords, id, data, level){ 
+    if(level>=1){
+        return [[87, 1, 0]];
+    }
+       return []
+    });
+Block.registerDropFunctionForID(21, function(coords, id, data, level){ 
+    if(level>=1){
+        return [[4, 1, 0]];
     }
        return []
     });
 Block.registerDropFunction("oreCopper", function(coords, id, data, level){ 
-    if(level>1){
+    if(level>=2){
         return [[litcopp, 1, 0], [litst, 3, 0]];
     }
        return []
     });
 Block.registerDropFunction("oreTin", function(coords, id, data, level){ 
-    if(level>1){
+    if(level>=2){
         return [[littin, 1, 0], [litst, 3, 0]];
     }
        return []
     });
 Block.registerDropFunction("blackstone", function(coords, id, data, level){ 
-    if(level>2){
+    if(level>=4){
         return [[BlockID.blackcobblestone, 1, 0]];
     }
        return []
     });
 Block.registerDropFunction("redstone", function(coords, id, data, level){ 
-    if(level>1){
+    if(level>=3){
         return [[BlockID.redcobblestone, 1, 0]];
     }
        return []
@@ -690,30 +871,47 @@ Block.registerDropFunctionForID(17, function(coords, id, data, level){
     });
 Block.registerDropFunctionForID(162, function(coords, id, data, level){ 
         return [[5, 2, data+4]];
-    });
-});
-
-if(industrial_craft){
-ATGen.StandartOreDeposite(BlockID.oreCopper, 0, 3, 24, 64, 100, 16);
-ATGen.StandartOreDeposite(BlockID.oreTin, 0, 3, 18, 52, 100, 16);
-}
-
-ATGen.StandartOreDeposite(BlockID.blackstone, 0, 256, 48, 64, 2, 1);
-ATGen.StandartOreDeposite(BlockID.redstone, 0, 256, 48, 64, 2, 1);
+    })
+Block.registerDropFunction("oreCoalStone", function(coords, id, data, level){ 
+    if(level>=1){
+        return [[263, 1, 0], [litst, 3, 0]];
+    }
+       return []
+    })
+Block.registerDropFunction("oreRedstoneStone", function(coords, id, data, level){ 
+    if(level>=1){
+        return [[331, random(3, 5), 0], [ItemID.smallDustRuby, 1, 0], [litst, 1, 0]];
+    }
+       return []
+    })
+Block.registerDropFunction(1, function(coords, id, data, level){ 
+    if(level>=1&&data==0&&rollPercentage(5)){
+        return [[litst, 4, 0]];
+    }else if(level>=1&&data==0){
+    	//Game.message(data)
+    	return[[4, 1, 0]]
+    }
+    if(level>=1){
+    	//Game.message(data)
+    	return[[id, 1, data]]
+    }
+    return []
+    })
 
 
 
 
 // file: recipes.js
 
-ATMech.FurnaceRecipe ({sS1:[265, 1, 0], rS1:[igst, 1, 0], long:240, temp:1600});
-
-ATMech.FurnaceRecipe ({sS1:[ItemID.dustIron, 1, 0], rS1:[265, 1, 0], long:100, temp:1000});
-ATMech.FurnaceRecipe ({sS1:[ItemID.dustGold, 1, 0], rS1:[266, 1, 0], long:30, temp:1000});
+ATMech.FurnaceRecipe ({sS1:[ItemID.ingotIron, 1, 0], sS2:[ItemID.dustCoal, 1, 0], rS1:[igst, 1, 0], long:steelLong, temp:steelTemp});
+ATMech.FurnaceRecipe ({sS1:[1, 1, 1], rS1:[ItemID.nuggetCopper, 2, 0], rS2:[ItemID.littleStone, 4, 0], long:copperLong*2, temp:copperTemp});
+ATMech.FurnaceRecipe ({sS1:[1, 1, 3], rS1:[ItemID.nuggetTin, 2, 0], rS2:[ItemID.littleStone, 4, 0], long:tinLong*2, temp:tinTemp});
+ATMech.FurnaceRecipe ({sS1:[1, 1, 5], rS1:[ItemID.nuggetIron, 2, 0], rS2:[ItemID.littleStone, 4, 0], long:ironLong*2, temp:ironTemp});
 
 ATMech.Fuel({id:173, data:0, second: 135, f:1});
 ATMech.Fuel({id:263, data:0, second: 15, f:1});
 ATMech.Fuel({id:263, data:1, second: 15, f:1});
+ATMech.Fuel({id:ItemID.dustCoal, data:0, second:30, f:1});
 ATMech.Fuel({id:5, data:0, second: 7.5, f:1});
 ATMech.Fuel({id:5, data:1, second: 7.5, f:1});
 ATMech.Fuel({id:5, data:2, second: 7.5, f:1});
@@ -721,244 +919,253 @@ ATMech.Fuel({id:5, data:3, second: 7.5, f:1});
 ATMech.Fuel({id:5, data:4, second: 7.5, f:1});
 ATMech.Fuel({id:5, data:5, second: 7.5, f:1});
 
-/*Recipes.ReplaceWithShaped = function(item, newRecipe, transcript, tool){
-	Recipes.deleteRecipe(item);
+Recipes.addFurnaceFuel(ItemID.dustCoal, 0, 3200);
+
+Recipes.ReplaceWithShaped = function(item, newRecipe, transcript, tool){
+	Recipes.deleteRecipe(item)
 	Recipes.addShaped(item, newRecipe, transcript, tool);
 }
 
-Callback.addCallback("PostLoaded", function(){
-var hummers = ATMat.hummers
-var mortars = ATMat.mortars
-var tungstensteels = ATMat.tungstensteels
+Recipes.ReplaceWithShapeless = function(item, newRecipe, transcript, tool){
+	Recipes.deleteRecipe(item);
+	Recipes.addShapeless(item, newRecipe, transcript, tool);
+}
 
-for(var key in hummers){
+//coal dust 
+CreateShapelessRecipeWithTool({id:ItemID.dustCoal, count:1, data:0}, [{id:ItemID.coal, data:0}], mortars)
+
+//steel dust
+Recipes.addShapeless({id:ItemID.dustSteel, count:1, data:0}, [{id:ItemID.dustIron, data:0}, {id:ItemID.dustCoal, data:0}])
+
+//bronze dust
+Recipes.ReplaceWithShapeless({id:ItemID.dustBronze, count:4, data:0}, [{id:ItemID.dustCopper, data:0}, {id:ItemID.dustCopper, data:0}, {id:ItemID.dustCopper, data:0}, {id:ItemID.dustTin, data:0}])
+ 
+ //cobblestone
+CreateRecipeWithTool({id:4, count:1, data:0}, [
+	"h ",
+	"bb",
+	"bb"
+], ['b', litst, 0], [hammers]); 
+
+//little stones
+CreateShapelessRecipeWithTool({id:litst, count:4, data:0}, [{id:4, data:0}], hammers)
+
 //replaced recipes
+Callback.addCallback("PostLoaded", function(){
 
-Recipes.ReplaceWithShaped({id:306, count:1, data:0}, [
+ReplaceRecipeWithTool({id:306, count:1, data:0}, [
 "ppp",
-"ptp",
-"   "
-], ['p', irpl, 0, 't', hummers[key], -1], CTR.Tool );
+"php"
+], ['p', irpl, 0], [hammers]);
 
-Recipes.ReplaceWithShaped ({id:307, count:1, data:0}, [
-"ptp",
-"ppp",
-"ppp"
-], ['p', irpl, 0, 't', hummers[key], -1], CTR.Tool )
-
-Recipes.ReplaceWithShaped ({id:308, count:1, data:0}, [
-"ppp",
-"ptp",
-"p p"
-], ['p', irpl, 0, 't', hummers[key], -1], CTR.Tool )
-
-Recipes.ReplaceWithShaped ({id:309, count:1, data:0}, [
-"ptp",
-"p p",
-"   "
-], ['p', irpl, 0, 't', hummers[key], -1], CTR.Tool);
-
-Recipes.ReplaceWithShaped({id:314, count:1, data:0}, [
-"ppp",
-"ptp",
-"   "
-], ['p', gpl, 0, 't', hummers[key], -1], CTR.Tool );
-
-Recipes.ReplaceWithShaped ({id:315, count:1, data:0}, [
-"ptp",
+ReplaceRecipeWithTool ({id:307, count:1, data:0}, [
+"php",
 "ppp",
 "ppp"
-], ['p', gpl, 0, 't', hummers[key], -1], CTR.Tool )
+], ['p', irpl, 0], [hammers])
 
-Recipes.ReplaceWithShaped ({id:316, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:308, count:1, data:0}, [
 "ppp",
-"ptp",
+"php",
 "p p"
-], ['p', gpl, 0, 't', hummers[key], -1], CTR.Tool )
+], ['p', irpl, 0], [hammers])
 
-Recipes.ReplaceWithShaped ({id:317, count:1, data:0}, [
-"ptp",
-"p p",
-"   "
-], ['p', gpl, 0, 't', hummers[key], -1], CTR.Tool );
+ReplaceRecipeWithTool ({id:309, count:1, data:0}, [
+"php",
+"p p"
+], ['p', irpl, 0], [hammers]);
 
-Recipes.ReplaceWithShaped({id: ItemID.bronzeHelmet, count: 1, data: 0}, [
-	"xxx",
-	"xtx"
-], ['x', ItemID.plateBronze, 0, 't', hummers[key], -1], CTR.Tool);
+ReplaceRecipeWithTool({id:314, count:1, data:0}, [
+"ppp",
+"php"
+], ['p', gpl, 0], [hammers] );
 
-Recipes.ReplaceWithShaped({id: ItemID.bronzeChestplate, count: 1, data: 0}, [
-	"xtx",
-	"xxx",
-	"xxx"
-], ['x', ItemID.plateBronze, 0, 't', hummers[key], -1], CTR.Tool);
+ReplaceRecipeWithTool ({id:315, count:1, data:0}, [
+"php",
+"ppp",
+"ppp"
+], ['p', gpl, 0], [hammers] )
 
-Recipes.ReplaceWithShaped({id: ItemID.bronzeLeggings, count: 1, data: 0}, [
-	"xxx",
-	"xtx",
-	"x x"
-], ['x', ItemID.plateBronze, 0, 't', hummers[key], -1],CTR.Tool );
+ReplaceRecipeWithTool ({id:316, count:1, data:0}, [
+"ppp",
+"php",
+"p p"
+], ['p', gpl, 0], [hammers] )
 
-Recipes.ReplaceWithShaped({id: ItemID.bronzeBoots, count: 1, data: 0}, [
-	"xtx",
-	"x x"
-], ['x', ItemID.plateBronze, 0, 't', hummers[key], -1], CTR.Tool);
+ReplaceRecipeWithTool ({id:317, count:1, data:0}, [
+"php",
+"p p"
+], ['p', gpl, 0], [hammers] )
 
-
-Recipes.addShaped({id:4, count:1, data:0}, [
-	"t ",
-	"bb",
-	"bb"
-], ['b', litst, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:c, count:1, data:0}, [
-	"t ",
-	"bb",
-	"bb"
-], ['b', 1, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:BlockID.compactedfurnace, count:1, data:0}, [
-	" t ",
-	"bfb",
-	"ggg"
-], ['b', c, 0, 'f', 61, 0, 'g', 82, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:ItemID.stonepickaxe, count:1, data:0}, [
-	"bbb",
-	"pst",
-	" s "
-], ['b', litst, 0, 's', 280, 0, 'p', 287, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:ItemID.stonesword, count:1, data:0}, [
-	"bt",
-	"bp",
-	"s "
-], ['b', litst, 0, 's', 280, 0, 'p', 287, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:ItemID.stoneaxe, count:1, data:0}, [
-	"bbt",
-	"bsp",
-	" s "
-], ['b', litst, 0, 's', 280, 0, 'p', 287, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:ItemID.stoneshovel, count:1, data:0}, [
-	"pbt",
-	" s ",
-	" s "
-], ['b', litst, 0, 's', 280, 0, 'p', 287, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:ItemID.stonehoe, count:1, data:0}, [
-	"pbt",
-	" s ",
-	" s "
-], ['b', litst, 0, 's', 280, 0, 'p', 287, 0, 't', hummers[key], -1], CTR.Tool); 
-
-Recipes.addShaped({id:b, count:1, data:0}, [
-	"pmp",
-	"btb",
-	"pmp"
-], ['p', brpl, 0, 'b', brbolt, 0, 'm', brmod, 0, 't', hummers[key], -1], CTR.Tool); 
-
-
-for(var key1 in tungstensteels){
-Recipes.ReplaceWithShaped ({id:267, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:267, count:1, data:0}, [
 "ph",
-"pt",
+"pf",
 "s "
-], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0], [hammers, files]);
 
-Recipes.ReplaceWithShaped ({id:257, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:257, count:1, data:0}, [
 "pii",
-"tsh",
+"fsh",
 " s "
-], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0], [hammers, files]);
 
-Recipes.ReplaceWithShaped ({id:258, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:258, count:1, data:0}, [
 "pih",
 "ps ",
-"ts "
-], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+"fs "
+], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0], [hammers, files]);
 
-Recipes.ReplaceWithShaped ({id:292, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:292, count:1, data:0}, [
 "pih",
-"ts ",
+"fs ",
 " s "
-], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0], [hammers, files]);
 
-Recipes.ReplaceWithShaped ({id:285, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:285, count:1, data:0}, [
 "pii",
-"tsh",
+"fsh",
 " s "
-], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0], [hammers, files]);
 
-Recipes.ReplaceWithShaped ({id:286, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:286, count:1, data:0}, [
 "pih",
 "ps ",
-"ts "
-], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+"fs "
+], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0], [hammers, files]);
 
-Recipes.ReplaceWithShaped ({id:294, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:294, count:1, data:0}, [
 "pih",
-"ts ",
+"fs ",
 " s "
-], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0], [hammers, files] );
 
 if(industrial_craft){
-Recipes.ReplaceWithShaped ({id:ItemID.bronzePickaxe, count:1, data:0}, [
-"pii",
-"tsh",
-" s "
-], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+ReplaceRecipeWithTool({id: ItemID.bronzeHelmet, count: 1, data: 0}, [
+	"xxx",
+	"xhx"
+], ['x', ItemID.plateBronze, 0], [hammers]);
 
-Recipes.ReplaceWithShaped ({id:ItemID.bronzeAxe, count:1, data:0}, [
+ReplaceRecipeWithTool({id: ItemID.bronzeChestplate, count: 1, data: 0}, [
+	"xhx",
+	"xxx",
+	"xxx"
+], ['x', ItemID.plateBronze, 0], [hammers]);
+
+ReplaceRecipeWithTool({id: ItemID.bronzeLeggings, count: 1, data: 0}, [
+	"xxx",
+	"xhx",
+	"x x"
+], ['x', ItemID.plateBronze, 0], [hammers]);
+
+ReplaceRecipeWithTool({id: ItemID.bronzeBoots, count: 1, data: 0}, [
+	"xhx",
+	"x x"
+], ['x', ItemID.plateBronze, 0], [hammers]);
+
+ReplaceRecipeWithTool ({id:ItemID.bronzePickaxe, count:1, data:0}, [
+"pii",
+"fsh",
+" s "
+], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0], [hammers, files]);
+
+ReplaceRecipeWithTool ({id:ItemID.bronzeAxe, count:1, data:0}, [
 "pih",
 "ps ",
-"ts "
-], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
+"fs "
+], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0], [hammers, files]);
 
-Recipes.ReplaceWithShaped ({id:ItemID.bronzeHoe, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:ItemID.bronzeHoe, count:1, data:0}, [
 "pih",
-"ts ",
+"fs ",
 " s "
-], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h', hummers[key], -1], CTR.Tool );
-}
-}
-}
-for(var key1 in tungstensteels){
-Recipes.ReplaceWithShaped ({id:256, count:1, data:0}, [
-"pt",
+], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0], [hammers, files]);
+
+ReplaceRecipeWithTool ({id:ItemID.bronzeSword, count:1, data:0}, [
+"ph",
+"ptf",
+"s "
+], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0], [hammers, files]);
+
+ReplaceRecipeWithTool ({id:ItemID.bronzeShovel, count:1, data:0}, [
+"pf",
 "s ",
 "s "
-], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h'], CTR.Tool );
+], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0], [files]);
+}
 
-Recipes.ReplaceWithShaped ({id:283, count:1, data:0}, [
+ReplaceRecipeWithTool ({id:256, count:1, data:0}, [
+"pf",
+"s ",
+"s "
+], ['p', irpl, 0, 'i', 265, 0, 's', 280, 0], [files]);
+
+ReplaceRecipeWithTool ({id:283, count:1, data:0}, [
 "p ",
-"pt",
+"ph",
 "s "
-], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0, 't', tungstensteels[key1], -1], CTR.Tool );
+], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0], [hammers]);
 
-Recipes.ReplaceWithShaped ({id:284, count:1, data:0}, [
-"pt",
+ReplaceRecipeWithTool ({id:284, count:1, data:0}, [
+"pf",
 "s ",
 "s "
-], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0, 't', tungstensteels[key1], -1, 'h'], CTR.Tool );
+], ['p', gpl, 0, 'i', 266, 0, 's', 280, 0], [files]);
 
-Recipes.ReplaceWithShaped ({id:ItemID.bronzeSword, count:1, data:0}, [
-"p ",
-"pt",
-"s "
-], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0, 't', tungstensteels[key1], -1], CTR.Tool );
+Recipes.ReplaceWithShaped({id:276, count:1, data:0}, [
+	"a",
+	"a",
+	"b"
+], ['a', ItemID.gemDiamond, 0, 'b', 280, 0])
 
-Recipes.ReplaceWithShaped ({id:ItemID.bronzeShovel, count:1, data:0}, [
-"pt",
-"s ",
-"s "
-], ['p', ItemID.plateBronze, 0, 'i', ItemID.ingotBronze, 0, 's', 280, 0, 't', tungstensteels[key1], -1], CTR.Tool );
-}
+Recipes.ReplaceWithShaped({id:277, count:1, data:0}, [
+	"a",
+	"b",
+	"b"
+], ['a', ItemID.gemDiamond, 0, 'b', 280, 0]); 
+
+Recipes.ReplaceWithShaped({id:278, count:1, data:0}, [
+	"aaa",
+	" b ",
+	" b "
+], ['a', ItemID.gemDiamond, 0, 'b', 280, 0]); 
+
+Recipes.ReplaceWithShaped({id:279, count:1, data:0}, [
+	"aa",
+	"ab",
+	" b"
+], ['a', ItemID.gemDiamond, 0, 'b', 280, 0]) 
+
+Recipes.ReplaceWithShaped({id:293, count:1, data:0}, [
+	"aa",
+	" b",
+	" b"
+], ['a', ItemID.gemDiamond, 0, 'b', 280, 0]); 
+
+Recipes.ReplaceWithShaped({id:310, count:1, data:0}, [
+	"aaa",
+	"a a"
+], ['a', ItemID.gemDiamond, 0]); 
+
+Recipes.ReplaceWithShaped({id:311, count:1, data:0}, [
+	"a a",
+	"aaa",
+	"aaa"
+], ['a', ItemID.gemDiamond, 0]); 
+
+Recipes.ReplaceWithShaped({id:312, count:1, data:0}, [
+	"aaa",
+	"a a",
+	"a a"
+], ['a', ItemID.gemDiamond, 0]); 
+
+Recipes.ReplaceWithShaped({id:313, count:1, data:0}, [
+	"a a",
+	"a a"
+], ['a', ItemID.gemDiamond, 0]); 
+
 })
 
-
-
+//deleted recipes
 Recipes.deleteRecipe({id:272, count:1, data:0});
 Recipes.deleteRecipe({id:273, count:1, data:0});
 Recipes.deleteRecipe({id:274, count:1, data:0});
@@ -972,21 +1179,91 @@ Recipes.deleteRecipe({id:270, count:1, data:0});
 Recipes.deleteRecipe({id:271, count:1, data:0});
 Recipes.deleteRecipe({id:290, count:1, data:0});
 
-//recipes
+Recipes.deleteRecipe({id:266, count:1, data:0});
+
+Recipes.deleteRecipe({id:ItemID.plateGold, count:1, data:0})
+Recipes.deleteRecipe({id:ItemID.craftingHammer, count:1, data:0});
+Recipes.deleteRecipe({id:ItemID.craftingCutter, count:1, data:0});
+
+//wool
 Recipes.addShapeless({id:287, count:4, data:0}, [{id:35, data:-1}]); 
 
+//planks
+for(var i = 0; i<3; i++){
+    Recipes.addShaped({id:17, count:1, data:i}, ["aa", "aa", "  a"], ['a', 5, i]); 
+}
+Recipes.addShaped({id:162, count:1, data:0}, ["aa", "aa", "  a"], ['a', 5, 4]); 
+Recipes.addShaped({id:162, count:1, data:1}, ["aa", "aa", "  a"], ['a', 5, 5]); 
+
+//torch
+Recipes.addShaped({id:50, count:4, data:0}, [
+	"a",
+	"b"
+], ['a', ItemID.dustCoal, 0, 'b', 280, 0]); 
+
+//furnace
 Recipes.ReplaceWithShaped({id:61, count:1, data:0}, [
 "bbb",
 "b b",
 "bbb"
 ], ['b', litst, 0]);
 
+//cobb furnace and blocks
+CreateRecipeWithTool({id:BlockID.compactedfurnace, count:1, data:0}, [
+	" h ",
+	"bfb",
+	"ggg"
+], ['b', c, 0, 'f', 61, 0, 'g', 82, 0], [hammers]); 
+
+CreateRecipeWithTool({id:c, count:1, data:0}, [
+	"h ",
+	"bb",
+	"bb"
+], ['b', 1, 0], [hammers]); 
+
+//blast furnace and blocks
 Recipes.addShaped({id:BlockID.blastfurnace, count:1, data:0}, [
 	"bmb",
 	"mfm",
 	"bmb"
-], ['b', brbolt, 0, 'm', brmod, 0, 'f', BlockID.compactedfurnace, 0], CTR.Tool); 
+], ['b', brbolt, 0, 'm', brmod, 0, 'f', BlockID.compactedfurnace, 0]); 
 
+CreateRecipeWithTool({id:b, count:1, data:0}, [
+	"pmp",
+	"bwb",
+	"pmp"
+], ['p', brpl, 0, 'b', brbolt, 0, 'm', brmod, 0], [wrenchs]); 
+
+//tools
+CreateRecipeWithTool({id:ItemID.stonepickaxe, count:1, data:0}, [
+	"bbb",
+	"psh",
+	" s "
+], ['b', litst, 0, 's', 280, 0, 'p', 287, 0], [hammers]); 
+
+CreateRecipeWithTool({id:ItemID.stonesword, count:1, data:0}, [
+	"bh",
+	"bp",
+	"s "
+], ['b', litst, 0, 's', 280, 0, 'p', 287, 0], [hammers]); 
+
+CreateRecipeWithTool({id:ItemID.stoneaxe, count:1, data:0}, [
+	"bbh",
+	"bsp",
+	" s "
+], ['b', litst, 0, 's', 280, 0, 'p', 287, 0], [hammers]); 
+
+CreateRecipeWithTool({id:ItemID.stoneshovel, count:1, data:0}, [
+	"pbh",
+	" s ",
+	" s "
+], ['b', litst, 0, 's', 280, 0, 'p', 287, 0], [hammers]); 
+
+CreateRecipeWithTool({id:ItemID.stonehoe, count:1, data:0}, [
+	"pbt",
+	" s ",
+	" s "
+], ['b', litst, 0, 's', 280, 0, 'p', 287, 0], [hammers]); 
 
 Recipes.addShaped ({id:ItemID.woodpickaxe, count:1, data:0}, [
 "www",
@@ -1018,21 +1295,61 @@ Recipes.addShaped({id:ItemID.woodhoe, count:1, data:0}, [
 	" s "
 ], ['b', 5, -1, 's', 280, 0, 'p', 287, 0]); 
 
+//craft tools
+Recipes.addShaped({id:ItemID.StoneHammer, count:1, data:0}, ["aa ", "aab", "aa"], ['a', litst, 0, 'b', 280, 0]);
 
-Recipes.addShaped({id:irhum, count:1, data:0}, [
+CreateRecipeWithTool({id:ItemID.StoneMortar, count:1, data:0}, [" h ", "cac", " c "], ['a', litst, 0, 'c', 1, 0], [hammers])
+
+Recipes.addShaped({id:ItemID.IronHammer, count:1, data:0}, [
 	"ii ",
-	"iss",
+	"iis",
 	"ii "
 ], ['i', 265, 0, 's', 280, 0]); 
 
+CreateRecipeWithTool({id:ItemID.IronFile, count:1, data:0}, [
+    "a ",
+    "bh",
+    "c "
+    ], ['a', 265, 0, 'b', irpl, 0, 'c', 280, 0], [hammers])
+    
+CreateRecipeWithTool({id:ItemID.IronCutter, count:1, data:0}, [
+    "a a",
+    "fah",
+    "b b"
+    ], ['a', irpl, 0, 'b', 280, 0], [hammers, files])
+    
+CreateRecipeWithTool({id:ItemID.IronWrench, count:1, data:0}, ["aha", "aaa", " a "], ['a', ItemID.plateIron, 0], [hammers]);
+
+CreateRecipeWithTool({id:ItemID.IronScrewdriver, count:1, data:0}, ["a ", "dh", "c "], ['a', ItemID.ingotIron, 0, 'c', 280, 0, 'd', ItemID.plateIron, 0], [hammers, files])
+    
+CreateRecipeWithTool({id:ItemID.IronMortar, count:1, data:0}, [" h ", "cac", " c "], ['a', 265, 0, 'c', 1, 0], [hammers]) 
+
+//iron
+CreateShapelessRecipeWithTool({id:ItemID.nuggetIron, count:9, data:0}, [{id:265, data:0}], hammers);
+CreateShapelessRecipeWithTool({id:ItemID.boltIron, count:1, data:0}, [{id:ItemID.nuggetIron, data:0}], files)
+ReplaceRecipeWithTool({id:ItemID.plateIron, count:1, data:0}, ["h", "a", "a"], ['a', 265, 0], [hammers])
+
+ATMech.FurnaceRecipe ({sS1:[ItemID.dustIron, 1, 0], rS1:[265, 1, 0], long:ironLong, temp:ironTemp});
+ATMech.FurnaceRecipe ({sS1:[ItemID.nuggetIron, 9, 0], rS1:[265, 1, 0], long:ironLong, temp:ironTemp});
+
+//gold
+ReplaceShapelessRecipeWithTool({id:ItemID.nuggetGold, count:9, data:0}, [{id:266, data:0}], hammers);
+CreateRecipeWithTool({id:ItemID.plateGold, count:1, data:0}, ["h", "a", "a"], ['a', 266, 0], [hammers])
+
+ATMech.FurnaceRecipe ({sS1:[ItemID.dustGold, 1, 0], rS1:[266, 1, 0], long:goldLong, temp:goldTemp});
+ATMech.FurnaceRecipe ({sS1:[ItemID.nuggetGold, 9, 0], rS1:[266, 1, 0], long:goldLong, temp:goldTemp});
+ATMech.FurnaceRecipe ({sS1:[ItemID.smallDustGold, 9, 0], rS1:[ItemID.nuggetGold, 1, 0], long:goldLong/9, temp:goldTemp});
 
 //configs
 Callback.addCallback("PostLoaded", function(){
 if(industrial_craft){
-Recipes.removeFurnaceRecipe(265, ItemID.ingotSteel, 0);
-Recipes.removeFurnaceRecipe(ItemID.dustBronze, ItemID.ingotBronze, 0);
+Recipes.removeFurnaceRecipe(265, -1);
+Recipes.removeFurnaceRecipe(ItemID.dustBronze, -1);
+Recipes.removeFurnaceRecipe(ItemID.dustCopper, -1);
+Recipes.removeFurnaceRecipe(ItemID.dustIron, -1);
+Recipes.removeFurnaceRecipe(ItemID.dustGold, -1);
 }
-});*/
+}); 
 
 
 

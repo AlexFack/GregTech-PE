@@ -1,18 +1,15 @@
 //id items
-var cobbhum = ItemID.stoneHammer;
-var irhum = ItemID.ironHammer;
-var irtung = ItemID.ironTungstensteel;
-var mort = ItemID.stoneMortar;
+var irhum = ItemID.IronHammer;
+var irtung = ItemID.IronTungstensteel;
+var mort = ItemID.StoneMortar;
 var litst = ItemID.littleStone
 var irpl = ItemID.plateIron;
 var brpl = ItemID.plateBronze;
 var gpl = ItemID.plateGold;
-var litir = ItemID.littleIronOre;
-var litcopp = ItemID.littleCopperOre;
-var littin = ItemID.littleTinOre;
-var litg = ItemID.littleGoldOre;
-var igcopp = ItemID.ingotCopper;
-var igtin = ItemID.ingotTin;
+var litir = ItemID.littleIron
+var litcopp = ItemID.littleCopper
+var littin = ItemID.littleTin
+var litg = ItemID.littleGold
 var igbr = ItemID.ingotBronze;
 var igst = ItemID.ingotSteel;
 var duir = ItemID.dustIron;
@@ -26,5 +23,9 @@ var sducopp = ItemID.smallDustCopper;
 var sdutin = ItemID.smallDustTin;
 var brmod = ItemID.moduleBronze;
 var brbolt = ItemID.boltBronze
+ItemID.nuggetGold = 371
+ItemID.ingotGold = 266
+ItemID.ingotIron = 265
+ItemID.coal = 263
  
 var lava = ItemID.itemlava;

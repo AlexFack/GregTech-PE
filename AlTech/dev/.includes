@@ -2,12 +2,12 @@ head.js
 
 items/tools.js
 items/materialRegister.js
-items/other.js
 items/ids.js
+items/other.js
 
 blocks/machines/template.js
 blocks/machines/blastFurnace.js
 blocks/machines/compactedFurnace.js
-blocks/blocks.js
+blocks/ores.js
 
 recipes.js

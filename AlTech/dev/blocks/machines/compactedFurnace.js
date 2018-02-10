@@ -5,10 +5,25 @@ var cMaxTemp = __config__.access("furnacesOptions.compactedFurnaceMaxTemp")
 //mechs
 IDRegistry.genBlockID("compactedfurnace");
 Block.createBlockWithRotation("compactedfurnace", [
-	{name: "Промышленная каменная печь", texture: [["compacted_stone", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ], ["furnace", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ]], inCreative: true}]);
+	{name: "Cobb furnace", texture: [["compacted_stone", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ], ["furnace", 0], ["compacted_stone", 0 ], ["compacted_stone", 0 ]], inCreative: true}]);
 IDRegistry.genBlockID("compactedcobblestone");
 Block.createBlock("compactedcobblestone", [
-{name: "Уплотненный булыжник", texture: [["compacted_stone", 0]], inCreative: true}]);
+{name: "Cobb furnace block", texture: [["compacted_stone", 0]], inCreative: true}]);
+
+Block.registerDropFunction("compactedfurnace", function(coords, id, data, level){ 
+	if(level>=1){
+		return [[id, 1, data]]
+	}
+	return []
+})
+
+Block.registerDropFunction("compactedcobblestone", function(coords, id, data, level){ 
+	if(level>=1){
+		return [[id, 1, data]]
+	}
+	return []
+})
+
 var c = BlockID.compactedcobblestone;
 
 var compactedfurnacestruct = [[

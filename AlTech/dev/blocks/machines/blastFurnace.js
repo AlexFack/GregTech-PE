@@ -5,10 +5,25 @@ var bMaxTemp = __config__.access("furnacesOptions.blastFurnaceMaxTemp")
 //mechs
 IDRegistry.genBlockID("blastfurnace");
 Block.createBlockWithRotation("blastfurnace", [
-	{name: "Доменная печь", texture: [["blast_furnace_block", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ], ["blast_furnace", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ]], inCreative: true}]);
+	{name: "Blast furnace", texture: [["blast_furnace_block", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ], ["blast_furnace", 0], [ "blast_furnace_block", 0 ], [ "blast_furnace_block", 0 ]], inCreative: true}]);
 IDRegistry.genBlockID("bronzeblock");
 Block.createBlock("bronzeblock", [
-	{name: "Блок доменной печи", texture: [["blast_furnace_block", 0]], inCreative: true}]);
+	{name: "Blast furnace block", texture: [["blast_furnace_block", 0]], inCreative: true}]);
+	
+Block.registerDropFunction("blastfurnace", function(coords, id, data, level){ 
+	if(level>=2){
+		return [[id, 1, data]]
+	}
+	return []
+})
+	
+Block.registerDropFunction("bronzeblock", function(coords, id, data, level){ 
+	if(level>=2){
+		return [[id, 1, data]]
+	}
+	return []
+})
+	
 var m = {x:0, y:0, z:0};
 var b = BlockID.bronzeblock;
 var d = null;
