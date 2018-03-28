@@ -1,15 +1,24 @@
 {
   "enabled":true,
-  "show_resource_errors":false,
-  "compability":{
-    "industrial_craft":true
-  },
-  "furnacesOptions":{
-    "blastFurnaceFuelFlowEfficiencyPercent":150,
-    "blastFurnaceRecipesEfficiencyPercent":150,
-    "blastFurnaceMaxTemp":1600,
-    "compactedFurnaceFuelFlowEfficiencyPercent":100,
-    "compactedFurnaceRecipesEfficiencyPercent":50,
-    "compactedFurnaceMaxTemp":1000
+  "vanileFurnaceTemp":1000,
+  "generation":{
+    "chanceMultiplier":1,
+    "checkChanceLimit":9,
+    "genChanceForBreed":75,
+    "chunkNumForGen":3,
+    "smallOresMinY":10,
+    "smallOresMaxY":120,
+    "smallOresCount":48,
+    "smallOresTiles":[
+      1,
+      14,
+      15,
+      16,
+      56,
+      73,
+      74,
+      129,
+      21
+    ]
   }
 }
